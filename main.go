@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
+	Router()
 	fmt.Println("Hello World")
 }

@@ -1,12 +1,7 @@
 package main
 
-import (
-	"net/http"
+import "github.com/gorilla/mux"
 
-	"github.com/gorilla/mux"
-)
+func Router(r *mux.Router) {
 
-func Router() {
-	r := mux.NewRouter()
-	http.ListenAndServe(":8088", r)
 }

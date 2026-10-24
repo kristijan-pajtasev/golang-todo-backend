@@ -1,10 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	Router()
-	fmt.Println("Hello World")
+	r := mux.NewRouter()
+	Router(r)
+	http.ListenAndServe(":8088", r)
 }

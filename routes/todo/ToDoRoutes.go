@@ -2,6 +2,7 @@ package todo
 
 import (
 	"encoding/json"
+	"golang-todo-backend-project/middleware"
 	"golang-todo-backend-project/models/todo"
 	"net/http"
 	"strconv"
@@ -16,9 +17,9 @@ type ApiResponse struct {
 func ToDoRoutes(mainRouter *mux.Router) {
 	todoRouter := mainRouter.PathPrefix("/todo").Subrouter()
 
-	todoRouter.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
+	todoRouter.HandleFunc("", middleware.Chain(func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(todo.GetAllTodos())
-	}).Methods("GET")
+	}, middleware.UserValidator())).Methods("GET")
 
 	todoRouter.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
 		var todoVal todo.ToDo

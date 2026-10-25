@@ -1,6 +1,9 @@
 package todo
 
-import "slices"
+import (
+	"golang-todo-backend-project/config"
+	"slices"
+)
 
 type ToDo struct {
 	Id          int    `json:"id"`
@@ -12,13 +15,16 @@ type ToDo struct {
 var userTodos = make(map[string][]ToDo)
 
 func init() {
-	userTodos["user"] = []ToDo{
-		{
-			Id:          1,
-			Title:       "Test title 1",
-			Content:     "Test Content 1",
-			IsCompleted: false,
-		},
+	allowedUsersList := config.Config.AllowedUsersList
+	for _, user := range allowedUsersList {
+		userTodos[user] = []ToDo{
+			{
+				Id:          1,
+				Title:       "Test title 1",
+				Content:     "Test Content 1",
+				IsCompleted: false,
+			},
+		}
 	}
 }
 

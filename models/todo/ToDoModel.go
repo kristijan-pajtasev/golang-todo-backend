@@ -12,8 +12,6 @@ type ToDo struct {
 var userTodos = make(map[string][]ToDo)
 
 func init() {
-
-	// Punjenje početnih podataka pod ključ "posao"
 	userTodos["user"] = []ToDo{
 		{Title: "ToDo 1", Content: "ToDo Content 1", IsCompleted: true},
 	}

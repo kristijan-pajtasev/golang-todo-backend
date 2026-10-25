@@ -2,6 +2,7 @@ package todo
 
 import (
 	"encoding/json"
+	"golang-todo-backend-project/helpers"
 	"golang-todo-backend-project/models/todo"
 	"net/http"
 	"strconv"
@@ -10,7 +11,8 @@ import (
 )
 
 func getAllToDoHandler(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(todo.GetAllTodos())
+	userId := helpers.GetCurrentUserKey(r)
+	json.NewEncoder(w).Encode(todo.GetAllTodos(userId))
 }
 
 func createToDoHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +25,9 @@ func createToDoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newTodo := todo.AddTodo(todoVal.Title, todoVal.Content, todoVal.IsCompleted)
+	userId := helpers.GetCurrentUserKey(r)
+
+	newTodo := todo.AddTodo(userId, todoVal.Title, todoVal.Content, todoVal.IsCompleted)
 	json.NewEncoder(w).Encode(newTodo)
 }
 
@@ -38,7 +42,9 @@ func updateToDoHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(`{"error": "Invalid object"}`))
 	}
-	updatedTodo := todo.UpdateTodoById(id, todoVal.Title, todoVal.Content, todoVal.IsCompleted)
+
+	userId := helpers.GetCurrentUserKey(r)
+	updatedTodo := todo.UpdateTodoById(userId, id, todoVal.Title, todoVal.Content, todoVal.IsCompleted)
 	json.NewEncoder(w).Encode(updatedTodo)
 }
 
@@ -46,13 +52,17 @@ func getTodoByIdHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	todoId := vars["id"]
 	id, _ := strconv.Atoi(todoId)
-	json.NewEncoder(w).Encode(todo.GetTodoById(id))
+
+	userId := helpers.GetCurrentUserKey(r)
+	json.NewEncoder(w).Encode(todo.GetTodoById(userId, id))
 }
 
 func deleteTodoByIdHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	todoId := vars["id"]
 	id, _ := strconv.Atoi(todoId)
-	success := todo.DeleteTodoById(id)
+
+	userId := helpers.GetCurrentUserKey(r)
+	success := todo.DeleteTodoById(userId, id)
 	json.NewEncoder(w).Encode(ApiResponse{Status: success})
 }

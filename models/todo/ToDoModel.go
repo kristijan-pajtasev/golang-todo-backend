@@ -28,8 +28,8 @@ func init() {
 	}
 }
 
-func AddTodo(title string, content string, isCompleted bool) *ToDo {
-	todos := userTodos["user"]
+func AddTodo(userId string, title string, content string, isCompleted bool) *ToDo {
+	todos := userTodos[userId]
 	id := todos[len(todos)-1].Id + 1
 	newTodo := ToDo{
 		Id:          id,
@@ -37,17 +37,17 @@ func AddTodo(title string, content string, isCompleted bool) *ToDo {
 		Content:     content,
 		IsCompleted: isCompleted,
 	}
-	userTodos["user"] = append(userTodos["user"], newTodo)
+	userTodos[userId] = append(userTodos[userId], newTodo)
 	return &newTodo
 }
 
-func GetAllTodos() []ToDo {
-	todos := userTodos["user"]
+func GetAllTodos(userId string) []ToDo {
+	todos := userTodos[userId]
 	return todos
 }
 
-func GetTodoById(todoId int) *ToDo {
-	var todos = userTodos["user"]
+func GetTodoById(userId string, todoId int) *ToDo {
+	var todos = userTodos[userId]
 	for _, todo := range todos {
 		if todo.Id == todoId {
 			return &todo
@@ -56,12 +56,12 @@ func GetTodoById(todoId int) *ToDo {
 	return nil
 }
 
-func DeleteTodoById(todoId int) bool {
-	var todos = userTodos["user"]
+func DeleteTodoById(userId string, todoId int) bool {
+	var todos = userTodos[userId]
 	for index, todo := range todos {
 		if todo.Id == todoId {
 			slice := slices.Delete(todos, index, index+1)
-			userTodos["user"] = slice
+			userTodos[userId] = slice
 			return true
 		}
 	}
@@ -69,14 +69,14 @@ func DeleteTodoById(todoId int) bool {
 
 }
 
-func UpdateTodoById(todoId int, title string, content string, isCompleted bool) *ToDo {
-	var todos = userTodos["user"]
+func UpdateTodoById(userId string, todoId int, title string, content string, isCompleted bool) *ToDo {
+	var todos = userTodos[userId]
 	for index, todo := range todos {
 		if todo.Id == todoId {
-			userTodos["user"][index].Content = content
-			userTodos["user"][index].Title = title
-			userTodos["user"][index].IsCompleted = isCompleted
-			return &userTodos["user"][index]
+			userTodos[userId][index].Content = content
+			userTodos[userId][index].Title = title
+			userTodos[userId][index].IsCompleted = isCompleted
+			return &userTodos[userId][index]
 		}
 	}
 	return nil

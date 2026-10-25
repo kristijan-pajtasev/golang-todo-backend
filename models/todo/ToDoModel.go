@@ -1,7 +1,5 @@
 package todo
 
-import "strconv"
-
 type ToDo struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -13,7 +11,12 @@ var userTodos = make(map[string][]ToDo)
 
 func init() {
 	userTodos["user"] = []ToDo{
-		{Title: "ToDo 1", Content: "ToDo Content 1", IsCompleted: true},
+		{
+			Id:          1,
+			Title:       "Test title 1",
+			Content:     "Test Content 1",
+			IsCompleted: false,
+		},
 	}
 }
 
@@ -36,13 +39,14 @@ func GetAllTodos() []ToDo {
 	return todos
 }
 
-func GetTodoById(todoId int) ToDo {
-	return ToDo{
-		Id:          todoId,
-		Title:       "Test title " + strconv.Itoa(todoId),
-		Content:     "Test Content " + strconv.Itoa(todoId),
-		IsCompleted: false,
+func GetTodoById(todoId int) *ToDo {
+	var userTodos = userTodos["user"]
+	for _, todo := range userTodos {
+		if todo.Id == todoId {
+			return &todo
+		}
 	}
+	return nil
 }
 
 func DeleteTodoById(todoId int) {}

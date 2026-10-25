@@ -16,6 +16,11 @@ func ToDoRoutes(mainRouter *mux.Router) {
 		json.NewEncoder(w).Encode(todo.GetAllTodos())
 	}).Methods("GET")
 
+	todoRouter.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
+		newTodo := todo.AddTodo("New todo title", "New todo content", false)
+		json.NewEncoder(w).Encode(newTodo)
+	}).Methods("POST")
+
 	todoRouter.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		todoId := vars["id"]

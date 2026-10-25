@@ -1,5 +1,10 @@
 package todo
 
+import (
+	"fmt"
+	"strconv"
+)
+
 type ToDo struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -20,7 +25,20 @@ func init() {
 	}
 }
 
-func AddTodo() {}
+func AddTodo(title string, content string, isCompleted bool) *ToDo {
+	todos := userTodos["user"]
+	fmt.Println("id before id ")
+	id := todos[len(todos)-1].Id + 1
+	fmt.Println("id: " + strconv.Itoa(id))
+	newTodo := ToDo{
+		Id:          id,
+		Title:       title,
+		Content:     content,
+		IsCompleted: isCompleted,
+	}
+	userTodos["user"] = append(userTodos["user"], newTodo)
+	return &newTodo
+}
 
 func GetAllTodos() []ToDo {
 	todos := []ToDo{
@@ -40,8 +58,8 @@ func GetAllTodos() []ToDo {
 }
 
 func GetTodoById(todoId int) *ToDo {
-	var userTodos = userTodos["user"]
-	for _, todo := range userTodos {
+	var todos = userTodos["user"]
+	for _, todo := range todos {
 		if todo.Id == todoId {
 			return &todo
 		}

@@ -1,11 +1,7 @@
 package todo
 
 import (
-	"encoding/json"
 	"golang-todo-backend-project/middleware"
-	"golang-todo-backend-project/models/todo"
-	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -17,36 +13,11 @@ type ApiResponse struct {
 func ToDoRoutes(mainRouter *mux.Router) {
 	todoRouter := mainRouter.PathPrefix("/todo").Subrouter()
 
-	todoRouter.HandleFunc("", middleware.Chain(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(todo.GetAllTodos())
-	}, middleware.UserValidator())).Methods("GET")
+	todoRouter.HandleFunc("", middleware.Chain(getAllToDoHandler, middleware.UserValidator())).Methods("GET")
 
-	todoRouter.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
-		var todoVal todo.ToDo
-		err := json.NewDecoder(r.Body).Decode(&todoVal)
+	todoRouter.HandleFunc("", createToDoHandler).Methods("POST")
 
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(`{"error": "Invalid object"}`))
-			return
-		}
+	todoRouter.HandleFunc("/{id}", getTodoByIdHandler).Methods("GET")
 
-		newTodo := todo.AddTodo(todoVal.Title, todoVal.Content, todoVal.IsCompleted)
-		json.NewEncoder(w).Encode(newTodo)
-	}).Methods("POST")
-
-	todoRouter.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		todoId := vars["id"]
-		id, _ := strconv.Atoi(todoId)
-		json.NewEncoder(w).Encode(todo.GetTodoById(id))
-	}).Methods("GET")
-
-	todoRouter.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		todoId := vars["id"]
-		id, _ := strconv.Atoi(todoId)
-		success := todo.DeleteTodoById(id)
-		json.NewEncoder(w).Encode(ApiResponse{Status: success})
-	}).Methods("DELETE")
+	todoRouter.HandleFunc("/{id}", deleteTodoByIdHandler).Methods("DELETE")
 }

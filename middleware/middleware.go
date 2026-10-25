@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 )
 
@@ -22,7 +21,6 @@ func UserValidator() Middleware {
 				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 				return
 			}
-			log.Println("advanced logger")
 			next(w, r)
 		}
 	}

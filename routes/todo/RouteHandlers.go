@@ -27,6 +27,21 @@ func createToDoHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newTodo)
 }
 
+func updateToDoHandler(w http.ResponseWriter, r *http.Request) {
+	var todoVal todo.ToDo
+	vars := mux.Vars(r)
+	todoId := vars["id"]
+	id, _ := strconv.Atoi(todoId)
+	err := json.NewDecoder(r.Body).Decode(&todoVal)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error": "Invalid object"}`))
+	}
+	updatedTodo := todo.UpdateTodoById(id, todoVal.Title, todoVal.Content, todoVal.IsCompleted)
+	json.NewEncoder(w).Encode(updatedTodo)
+}
+
 func getTodoByIdHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	todoId := vars["id"]

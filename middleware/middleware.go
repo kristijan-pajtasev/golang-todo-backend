@@ -1,7 +1,9 @@
 package middleware
 
 import (
+	"golang-todo-backend-project/config"
 	"net/http"
+	"slices"
 )
 
 type Middleware func(handlerFunc http.HandlerFunc) http.HandlerFunc
@@ -17,7 +19,8 @@ func UserValidator() Middleware {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			userId := r.URL.Query().Get("user")
-			if userId == "" {
+			allowedUsers := config.Config.AllowedUsersList
+			if userId == "" || !slices.Contains(allowedUsers, userId) {
 				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 				return
 			}

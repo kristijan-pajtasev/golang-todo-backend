@@ -8,10 +8,30 @@ type ToDo struct {
 
 func AddTodo() {}
 
-func GetAllTodos() {}
+func GetAllTodos()[]ToDo {
+	todos:= []ToDo{
+		{
+			Title: "Todo 1",
+			Content: "Test Content",
+			IsCompleted: false,
+		},
+		{
+			Title: "Todo 2",
+			Content: "Test Content",
+			IsCompleted: false,
+		},
+	}
+	return todos
+}
 
-func GetTodoById() {}
+func GetTodoById(todoId int) ToDo {
+	return ToDo{
+		Title: "Test title",
+		Content: "Test Content",
+		IsCompleted: false
+	}
+}
 
-func DeleteTodoById() {}
+func DeleteTodoById(todoId int) {}
 
 func UpdateTodoById() {}

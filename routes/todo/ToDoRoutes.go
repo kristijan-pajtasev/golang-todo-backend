@@ -13,13 +13,13 @@ type ApiResponse struct {
 func ToDoRoutes(mainRouter *mux.Router) {
 	todoRouter := mainRouter.PathPrefix("/todo").Subrouter()
 
-	todoRouter.HandleFunc("", middleware.Chain(getAllToDoHandler, middleware.UserValidator())).Methods("GET")
+	todoRouter.HandleFunc("", middleware.Chain(getAllToDoHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("GET")
 
-	todoRouter.HandleFunc("", middleware.Chain(createToDoHandler, middleware.UserValidator())).Methods("POST")
+	todoRouter.HandleFunc("", middleware.Chain(createToDoHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("POST")
 
-	todoRouter.HandleFunc("/{id}", middleware.Chain(getTodoByIdHandler, middleware.UserValidator())).Methods("GET")
+	todoRouter.HandleFunc("/{id}", middleware.Chain(getTodoByIdHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("GET")
 
-	todoRouter.HandleFunc("/{id}", middleware.Chain(updateToDoHandler, middleware.UserValidator())).Methods("POST")
+	todoRouter.HandleFunc("/{id}", middleware.Chain(updateToDoHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("POST")
 
-	todoRouter.HandleFunc("/{id}", middleware.Chain(deleteTodoByIdHandler, middleware.UserValidator())).Methods("DELETE")
+	todoRouter.HandleFunc("/{id}", middleware.Chain(deleteTodoByIdHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("DELETE")
 }

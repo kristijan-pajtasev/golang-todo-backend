@@ -9,6 +9,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type ApiResponse struct {
+	Status bool `json:"status"`
+}
+
 func ToDoRoutes(mainRouter *mux.Router) {
 	todoRouter := mainRouter.PathPrefix("/todo").Subrouter()
 
@@ -36,4 +40,12 @@ func ToDoRoutes(mainRouter *mux.Router) {
 		id, _ := strconv.Atoi(todoId)
 		json.NewEncoder(w).Encode(todo.GetTodoById(id))
 	}).Methods("GET")
+
+	todoRouter.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		todoId := vars["id"]
+		id, _ := strconv.Atoi(todoId)
+		success := todo.DeleteTodoById(id)
+		json.NewEncoder(w).Encode(ApiResponse{Status: success})
+	}).Methods("DELETE")
 }

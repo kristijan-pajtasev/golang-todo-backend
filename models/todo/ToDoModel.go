@@ -1,5 +1,7 @@
 package todo
 
+import "slices"
+
 type ToDo struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -60,6 +62,17 @@ func GetTodoById(todoId int) *ToDo {
 	return nil
 }
 
-func DeleteTodoById(todoId int) {}
+func DeleteTodoById(todoId int) bool {
+	var todos = userTodos["user"]
+	for index, todo := range todos {
+		if todo.Id == todoId {
+			slice := slices.Delete(todos, index, index+1)
+			userTodos["user"] = slice
+			return true
+		}
+	}
+	return false
+
+}
 
 func UpdateTodoById() {}

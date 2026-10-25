@@ -1,10 +1,5 @@
 package todo
 
-import (
-	"fmt"
-	"strconv"
-)
-
 type ToDo struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -27,9 +22,7 @@ func init() {
 
 func AddTodo(title string, content string, isCompleted bool) *ToDo {
 	todos := userTodos["user"]
-	fmt.Println("id before id ")
 	id := todos[len(todos)-1].Id + 1
-	fmt.Println("id: " + strconv.Itoa(id))
 	newTodo := ToDo{
 		Id:          id,
 		Title:       title,

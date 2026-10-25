@@ -17,7 +17,16 @@ func ToDoRoutes(mainRouter *mux.Router) {
 	}).Methods("GET")
 
 	todoRouter.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
-		newTodo := todo.AddTodo("New todo title", "New todo content", false)
+		var todoVal todo.ToDo
+		err := json.NewDecoder(r.Body).Decode(&todoVal)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(`{"error": "Invalid object"}`))
+			return
+		}
+
+		newTodo := todo.AddTodo(todoVal.Title, todoVal.Content, todoVal.IsCompleted)
 		json.NewEncoder(w).Encode(newTodo)
 	}).Methods("POST")
 

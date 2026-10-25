@@ -1,5 +1,7 @@
 package todo
 
+import "strconv"
+
 type ToDo struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -28,8 +30,9 @@ func GetAllTodos() []ToDo {
 
 func GetTodoById(todoId int) ToDo {
 	return ToDo{
-		Title:       "Test title",
-		Content:     "Test Content",
+		Id:          todoId,
+		Title:       "Test title " + strconv.Itoa(todoId),
+		Content:     "Test Content " + strconv.Itoa(todoId),
 		IsCompleted: false,
 	}
 }

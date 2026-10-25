@@ -63,4 +63,15 @@ func DeleteTodoById(todoId int) bool {
 
 }
 
-func UpdateTodoById() {}
+func UpdateTodoById(todoId int, title string, content string, isCompleted bool) bool {
+	var todos = userTodos["user"]
+	for _, todo := range todos {
+		if todo.Id == todoId {
+			todo.Title = title
+			todo.Content = content
+			todo.IsCompleted = isCompleted
+			return true
+		}
+	}
+	return false
+}

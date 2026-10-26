@@ -20,7 +20,7 @@ func AddTodo(userId string, title string, content string, isCompleted bool) *ToD
 	todos := userTodos[userId]
 	var id int
 	if len(todos) >= 1 {
-		id = todos[len(todos)-1].Id
+		id = todos[len(todos)-1].Id + 1
 	} else {
 		id = 1
 	}

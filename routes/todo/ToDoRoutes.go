@@ -21,5 +21,5 @@ func ToDoRoutes(mainRouter *mux.Router) {
 
 	todoRouter.HandleFunc("/{id}", middleware.Chain(updateToDoHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("POST")
 
-	todoRouter.HandleFunc("/{id}", middleware.Chain(deleteTodoByIdHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("DELETE")
+	todoRouter.HandleFunc("/{id}", middleware.Chain(deleteTodoByIdHandler, middleware.EnableCORS(), middleware.UserValidator())).Methods("DELETE", "OPTIONS")
 }

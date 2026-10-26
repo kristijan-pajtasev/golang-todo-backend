@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"golang-todo-backend-project/config"
 	"golang-todo-backend-project/helpers"
+	"golang-todo-backend-project/middleware"
 	"net/http"
 	"slices"
 
@@ -18,14 +19,14 @@ type ApiResponse struct {
 }
 
 func Router(r *mux.Router) {
-	r.HandleFunc("/validate-user", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/validate-user", middleware.Chain(func(w http.ResponseWriter, r *http.Request) {
 		userId := helpers.GetCurrentUserKey(r)
 		if slices.Contains(config.Config.AllowedUsersList, userId) {
 			json.NewEncoder(w).Encode(ApiResponse{Status: true})
 		} else {
 			json.NewEncoder(w).Encode(ApiResponse{Status: false})
 		}
-	}).Methods("GET")
+	}, middleware.EnableCORS())).Methods("GET")
 
 	todo.ToDoRoutes(r)
 }
